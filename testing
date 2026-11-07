@@ -1,0 +1,73 @@
+#!/usr/bin/env bash
+# Runner test Easy Rent Bali Track C via podman compose (redis + app, semua di compose.yml).
+# Pakai: ./testing            -> jalankan semua test
+#        ./testing checkout   -> Part 2 saja (concurrency + handler demo)
+#        ./testing triage     -> Part 3 triage saja
+#        ./testing dispatch   -> Part 3 dispatcher + reconciliation saja
+#        ./testing down       -> matikan redis & app
+set -e
+cd "$(dirname "$0")"
+
+COMPOSE="podman compose -f compose.yml"
+
+start() {
+    # Sudah running? Pakai terus, jangan recreate.
+    if [ -n "$($COMPOSE ps --status running -q app)" ]; then
+        return
+    fi
+    # Build image hanya sekali (kalau belum ada), lalu up tanpa build.
+    podman image exists easy-rent-bali-assessment-app || $COMPOSE build app 2>&1 | grep -v "^<" || true
+    $COMPOSE up -d 2>&1 | grep -v "^<" || true
+}
+
+run() {
+    # Jalankan perintah di container app yang menempel ke service compose.
+    $COMPOSE exec -T app python3 "$1"
+}
+
+case "${1:-all}" in
+    checkout)
+        start
+        echo "=== Part 2: test concurrency (5 request: 1 success, 4 x 409) ==="
+        run src/patch/test_concurrency.py
+        echo
+        echo "=== Part 2: demo handler ter-patch ==="
+        run src/patch/checkout_handler.py
+        ;;
+    triage)
+        start
+        echo "=== Part 3: triage engine (dataset: data/outage_telemetry.json) ==="
+        run src/engine/triage_engine.py
+        ;;
+    dispatch)
+        start
+        echo "=== Part 3: dispatcher (backoff+jitter) ==="
+        run src/engine/dispatcher.py
+        ;;
+    down)
+        $COMPOSE down
+        exit 0
+        ;;
+    all)
+        start
+        echo "=== Part 2: test concurrency (5 request: 1 success, 4 x 409) ==="
+        run src/patch/test_concurrency.py
+        echo
+        echo "=== Part 2: demo handler ter-patch ==="
+        run src/patch/checkout_handler.py
+        echo
+        echo "=== Part 3: triage engine (dataset: data/outage_telemetry.json) ==="
+        run src/engine/triage_engine.py
+        echo
+        echo "=== Part 3: dispatcher (backoff+jitter) ==="
+        run src/engine/dispatcher.py
+        ;;
+    *) echo "Pilihan: ./testing [checkout|triage|dispatch|down] (tanpa argumen = semua)"; exit 1 ;;
+esac
+
+echo
+echo "=== Selesai. Lokasi hasil untuk dicek manual ==="
+echo "- Reconciliation JSON : $(pwd)/output/incident_reconciliation.json"
+echo "- Dataset input       : $(pwd)/data/outage_telemetry.json"
+echo "- Redis (inspeksi)    : redis-cli -h 127.0.0.1 keys '*'   # jalankan ./testing down untuk matikan"
+echo "- Lihat JSON rapi     : python3 -m json.tool output/incident_reconciliation.json"

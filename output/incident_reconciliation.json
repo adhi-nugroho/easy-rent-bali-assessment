@@ -1,0 +1,109 @@
+{
+  "generated_at": "2026-11-06T03:08:34+0000",
+  "summary": {
+    "vehicles_scanned": 6,
+    "alerts_raised": 6,
+    "delivered": 6,
+    "failed": 0
+  },
+  "alerts": [
+    {
+      "alert": "CRITICAL_SECURITY_ALERT",
+      "device_id": "iot_car_02",
+      "plate": "DK 5678 CD",
+      "model": "Mitsubishi Xpander",
+      "zone": "KUTA_HUB",
+      "gateway_id": "gw_kuta_01",
+      "reason": "available car moving at 52 km/h"
+    },
+    {
+      "alert": "MAINTENANCE_REQUIRED",
+      "device_id": "iot_car_03",
+      "plate": "DK 9012 EF",
+      "model": "Toyota Innova Zenix",
+      "zone": "ULUWATU",
+      "gateway_id": "gw_kuta_01",
+      "reason": "battery 11.2V (< 11.5V)"
+    },
+    {
+      "alert": "MAINTENANCE_REQUIRED",
+      "device_id": "iot_car_04",
+      "plate": "DK 3456 GH",
+      "model": "Suzuki Ertiga",
+      "zone": "SANUR",
+      "gateway_id": "gw_kuta_01",
+      "reason": "fuel 9% (< 15%)"
+    },
+    {
+      "alert": "CRITICAL_SECURITY_ALERT",
+      "device_id": "iot_car_05",
+      "plate": "DK 7890 IJ",
+      "model": "Toyota Fortuner",
+      "zone": "RESTRICTED_OFFROAD_BATUKARU",
+      "gateway_id": "gw_kuta_01",
+      "reason": "in restricted zone RESTRICTED_OFFROAD_BATUKARU"
+    },
+    {
+      "alert": "OFFLINE_TELEMETRY_DROP",
+      "device_id": "iot_car_06",
+      "plate": "DK 2345 KL",
+      "model": "Toyota Raize",
+      "zone": "KUTA_HUB",
+      "gateway_id": "gw_kuta_01",
+      "reason": "rented car silent for 1320s (> 900s)"
+    },
+    {
+      "alert": "MAINTENANCE_REQUIRED",
+      "device_id": "iot_car_08",
+      "plate": "DK 4567 OP",
+      "model": "Honda Brio",
+      "zone": "KUTA_HUB",
+      "gateway_id": "gw_kuta_01",
+      "reason": "battery 11.3V (< 11.5V); fuel 11% (< 15%)"
+    }
+  ],
+  "delivery": [
+    {
+      "alert_id": "iot_car_02:CRITICAL_SECURITY_ALERT",
+      "plate": "DK 5678 CD",
+      "tag": "CRITICAL_SECURITY_ALERT",
+      "attempts": 3,
+      "delivered": true
+    },
+    {
+      "alert_id": "iot_car_03:MAINTENANCE_REQUIRED",
+      "plate": "DK 9012 EF",
+      "tag": "MAINTENANCE_REQUIRED",
+      "attempts": 3,
+      "delivered": true
+    },
+    {
+      "alert_id": "iot_car_04:MAINTENANCE_REQUIRED",
+      "plate": "DK 3456 GH",
+      "tag": "MAINTENANCE_REQUIRED",
+      "attempts": 3,
+      "delivered": true
+    },
+    {
+      "alert_id": "iot_car_05:CRITICAL_SECURITY_ALERT",
+      "plate": "DK 7890 IJ",
+      "tag": "CRITICAL_SECURITY_ALERT",
+      "attempts": 3,
+      "delivered": true
+    },
+    {
+      "alert_id": "iot_car_06:OFFLINE_TELEMETRY_DROP",
+      "plate": "DK 2345 KL",
+      "tag": "OFFLINE_TELEMETRY_DROP",
+      "attempts": 3,
+      "delivered": true
+    },
+    {
+      "alert_id": "iot_car_08:MAINTENANCE_REQUIRED",
+      "plate": "DK 4567 OP",
+      "tag": "MAINTENANCE_REQUIRED",
+      "attempts": 3,
+      "delivered": true
+    }
+  ]
+}
